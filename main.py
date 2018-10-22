@@ -66,7 +66,7 @@ def main():
                     XML = xml.read()
 
                 # находим условия, которые будем проверять
-                OUR_PLACE = re.findall(r'<electronicPlaceId>(104|2580)</electronicPlaceId>', XML)
+                OUR_PLACE = re.findall(r'<electronicPlaceId>(104|2580|3)</electronicPlaceId>', XML)
 
                 # если для нашей площадки и метод не от старой секции, то забираем xml
                 if OUR_PLACE:
