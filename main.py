@@ -21,7 +21,6 @@ def main():
     # инициализируем подключение к ftp
     connect = Ftp(connection=Ftp.CONNECT_223_FREE_FTP)
     # инициализируем подключения к бд
-    cn_223_old = Mc(connection=Mc.MS_94_1_CONNECT)
     cn_catalog = Mc(connection=Mc.MS_223_CATALOG_CONNECT)
 
     # искать будем за вчерашний день
@@ -77,8 +76,6 @@ def main():
                     number = str(next(counter))
                     publication_info = found_procedure_223_db(auction, version=version)
 
-                    with cn_223_old.open():
-                        ON_OLD_223 = cn_223_old.execute_query(check_old_223_query % auction)
                     with cn_catalog.open():
                         ON_CATALOG = cn_catalog.execute_query(check_catalog_query % (auction, version))
 
@@ -94,14 +91,9 @@ def main():
                                                                                                     method_code)
 
                     if ON_CATALOG:
-                        MAIL_TEXT += ', в каталоге присутствует'
+                        MAIL_TEXT += ', в каталоге присутствует\n\n'
                     else:
-                        MAIL_TEXT += ', в каталоге отсутствует'
-
-                    if ON_OLD_223:
-                        MAIL_TEXT += ', дублируется со старой 223\n\n'
-                    else:
-                        MAIL_TEXT += ', на старой 223 не публиковался\n\n'
+                        MAIL_TEXT += ', в каталоге отсутствует\n\n'
 
                     xml_with_link = join(found_xml_dir, number + '_' + auction + '_' + version + '.xml')
                     files_for_send.append(xml_with_link)
